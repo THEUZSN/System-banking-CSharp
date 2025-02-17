@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Bank;
 
-public static class Program
+public class Program
 {
     public class ContaBancaria
     {
@@ -18,6 +18,8 @@ public static class Program
             User = user;
             saldo = saldoI;
         }
+
+
         // Metodo para executar saque
         public bool Sacar(double value)
         {
@@ -51,26 +53,79 @@ public static class Program
         public void Info()
         {
             Console.WriteLine($"Informações da conta...\nConta : {ID}\nNome  : {User}\nSaldo : R${saldo:F2}\n");
+        }
+    }
+    public static void Interface(ContaBancaria conta, ContaBancaria conta2)
+    {
+        Console.WriteLine("Sistema Bancario\nSeja bem vindo ao meu sistema bancario :)\n");
 
+        bool continuar = true;
+        while (continuar)
+        {
+            Console.Write("1-Consultar conta\n2-Sacar\n3-Depositar\n4-Traferencia\n5-Sair\n");
+            int escolha = Convert.ToInt32(Console.ReadLine());
+
+            switch (escolha)
+            {
+                case 1:
+                    conta.Info();
+                    break;
+
+                case 2:
+                    Console.Write("Escolha o valor que deseja sacar\n");
+                    double valor = Convert.ToDouble(Console.ReadLine());
+                    conta.Sacar(valor);
+                    break;
+
+                case 3:
+                    Console.WriteLine("Digite o valor que deseja depositar");
+                    double val = Convert.ToDouble(Console.ReadLine());
+                    conta.Depositar(val);
+                    break;
+
+                case 4:
+                    Console.WriteLine("Digite o valor da transferencia: ");
+                    double transferir = Convert.ToDouble(Console.ReadLine());
+
+                    bool transferenciabool = conta.Transferir(conta2, transferir);
+                    if (transferenciabool)
+                    {
+                        Console.WriteLine("");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Transferencia nao realizada. Ocorreu eu erro:(");
+                    }
+                    break;
+
+                case 5:
+                    continuar = false;
+                    break;
+            }
+            if (!continuar)
+            {
+                Console.WriteLine("Aperte qualquer tecla");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("Obrigado por usar meu banco ! Volte sempre :)");
+                Console.WriteLine("Digite enter para fechar o programa");
+                while (true)
+                {
+                    var tecla = Console.ReadKey().Key;
+                    if (tecla == ConsoleKey.Enter)
+                    {
+                        Environment.Exit(0);
+                    }
+                }
+            }
         }
     }
 
     public static void Main()
     {
-        ContaBancaria conta = new ContaBancaria(1, "Matheus", 0);
-        ContaBancaria conta2 = new ContaBancaria(2, "Jose", 0);
-        conta.Info();
-        conta.Depositar(500);
-        conta.Info();
-        conta.Sacar(600);
-        conta.Info();
+        ContaBancaria conta = new ContaBancaria(1, "Matheus", 1000);
+        ContaBancaria conta2 = new ContaBancaria(2, "Jose", 1000);
 
-        conta2.Info();
-        conta.Transferir(conta2, 300);
-
-        conta.Info();
-        conta2.Info();
-
-
+        Interface(conta, conta2);
     }
 }
