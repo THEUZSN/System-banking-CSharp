@@ -1,22 +1,36 @@
 ﻿using System;
 using System.Linq;
 
-
-namespace Bank;
+namespace Bank.Program;
 
 public class Program
 {
     public class ContaBancaria
     {
-        public int ID { get; }
+        public static int proximoId = 1;
+
+        public int ID { get; private set; }
         public string User { get; }
         private double saldo;
 
-        public ContaBancaria(int id, string user, double saldoI)
+        public ContaBancaria(string user, double saldoI)
         {
-            ID = id;
+            ID = proximoId++;
             User = user;
             saldo = saldoI;
+        }
+
+        //Criação de conta personalizada
+        public static ContaBancaria CriarUsuario()
+        {
+            Console.Write("Digite seu nome : ");
+            string nome = Console.ReadLine();
+
+            Console.Write("Digite seu saldo : ");
+            double saldo = Convert.ToDouble(Console.ReadLine());
+
+            return new ContaBancaria(nome, saldo);
+
         }
 
 
@@ -57,7 +71,7 @@ public class Program
     }
     public static void Interface(ContaBancaria conta, ContaBancaria conta2)
     {
-        Console.WriteLine("Sistema Bancario\nSeja bem vindo ao meu sistema bancario :)\n");
+        Console.WriteLine("\nSistema Bancario\nSeja bem vindo ao meu sistema bancario :)\n");
 
         bool continuar = true;
         while (continuar)
@@ -104,8 +118,6 @@ public class Program
             }
             if (!continuar)
             {
-                Console.WriteLine("Aperte qualquer tecla");
-                Console.ReadKey();
                 Console.Clear();
                 Console.WriteLine("Obrigado por usar meu banco ! Volte sempre :)");
                 Console.WriteLine("Digite enter para fechar o programa");
@@ -123,8 +135,11 @@ public class Program
 
     public static void Main()
     {
-        ContaBancaria conta = new ContaBancaria(1, "Matheus", 1000);
-        ContaBancaria conta2 = new ContaBancaria(2, "Jose", 1000);
+        Console.WriteLine("Criar Primeira conta :\n");
+        ContaBancaria conta = ContaBancaria.CriarUsuario();
+
+        Console.WriteLine("\nCriar segunda conta :\n");
+        ContaBancaria conta2 = ContaBancaria.CriarUsuario();
 
         Interface(conta, conta2);
     }
